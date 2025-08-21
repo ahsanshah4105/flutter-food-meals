@@ -1,0 +1,1 @@
+enum EditFieldType  {name, email, password, phone}
