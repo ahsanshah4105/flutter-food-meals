@@ -6,5 +6,4 @@ class AddMealBinding extends Bindings{
   void dependencies() {
     Get.lazyPut(() => AddMealController());
   }
-
 }

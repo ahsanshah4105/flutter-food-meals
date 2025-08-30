@@ -7,6 +7,9 @@ import 'package:get/get.dart';
 import '../../../../core/utils/app_assets.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/app_fonts.dart';
+import '../../../../core/utils/enums/connectivity_status.dart';
+import '../../../../core/widgets/base_scaffold.dart';
+import '../../../connectivity/controllers/connectivity_controller.dart';
 import '../controller/dashboard_controller.dart';
 
 class DashBoard extends StatefulWidget {
@@ -18,7 +21,8 @@ class DashBoard extends StatefulWidget {
 
 class _DashBoardState extends State<DashBoard> {
   final DashBoardController _controller = Get.find<DashBoardController>();
-
+  final ConnectivityController _connectivityController =
+  Get.find<ConnectivityController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,149 +33,171 @@ class _DashBoardState extends State<DashBoard> {
           backgroundColor: Colors.transparent,
         ),
       ),
-      body: PopScope(
-          canPop: _controller.currentIndex.value == 0,
-          onPopInvokedWithResult: (bool didPop, dynamic result) {
-            if (!didPop && _controller.currentIndex.value != 0) {
-              _controller.currentIndex.value = 0;
-            }
-          },
-          child: Obx(() => Scaffold(
-          body: _controller.pages[_controller.currentIndex.value],
-          bottomNavigationBar: SizedBox(
-            child: BottomNavigationBar(
-              backgroundColor: AppColors.white,
-              type: BottomNavigationBarType.fixed,
-              currentIndex: _controller.currentIndex.value,
-              onTap: (index) => _controller.currentIndex.value = index,
-              selectedItemColor: AppColors.greenAccent,
-              selectedLabelStyle: TextStyle(
-                fontFamily: AppFonts.nunitoMedium,
-                fontWeight: FontWeight.w500,
-                fontSize: 13.sp,
-                color: AppColors.greenAccent,
-              ),
-              unselectedLabelStyle: TextStyle(
-                fontFamily: AppFonts.nunitoMedium,
-                fontWeight: FontWeight.w500,
-                fontSize: 13.sp,
-                color: AppColors.blendModeColor,
-              ),
-              items: [
-                BottomNavigationBarItem(
-                  icon: Column(
-                    children: [
-                      SizedBox(height: 17,),
-                      ImageViewer(
-                        url: AppAssets.homeIcon,
-                        width: 18.w,
-                        height: 18.h,
-                        color: AppColors.blendModeColor,
-                      ),
-                      SizedBox(height: 7.h),
-                    ],
+      body: Stack(children: [
+        PopScope(
+            canPop: _controller.currentIndex.value == 0,
+            onPopInvokedWithResult: (bool didPop, dynamic result) {
+              if (!didPop && _controller.currentIndex.value != 0) {
+                _controller.currentIndex.value = 0;
+              }
+            },
+            child: Obx(() => Scaffold(
+              body: _controller.pages[_controller.currentIndex.value],
+              bottomNavigationBar: SizedBox(
+                child: BottomNavigationBar(
+                  backgroundColor: AppColors.white,
+                  type: BottomNavigationBarType.fixed,
+                  currentIndex: _controller.currentIndex.value,
+                  onTap: (index) => _controller.currentIndex.value = index,
+                  selectedItemColor: AppColors.greenAccent,
+                  selectedLabelStyle: TextStyle(
+                    fontFamily: AppFonts.nunitoMedium,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 13.sp,
+                    color: AppColors.greenAccent,
                   ),
-                  activeIcon: Column(
-                    children: [
-                      SizedBox(height: 17,),
-                      ImageViewer(
-                        url: AppAssets.homeIcon,
-                        width: 18.w,
-                        height: 18.h,
-                        color: AppColors.greenAccent,
-                      ),
-                      SizedBox(height: 7.h),
-                    ],
+                  unselectedLabelStyle: TextStyle(
+                    fontFamily: AppFonts.nunitoMedium,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 13.sp,
+                    color: AppColors.blendModeColor,
                   ),
-                  label: AppStrings.home,
-                ),
-                BottomNavigationBarItem(
-                  icon: Column(
-                    children: [
-                      SizedBox(height: 17,),
-                      ImageViewer(
-                        url: AppAssets.listIcon,
-                        width: 18.w,
-                        height: 18.h,
-                        color: AppColors.blendModeColor,
+                  items: [
+                    BottomNavigationBarItem(
+                      icon: Column(
+                        children: [
+                          SizedBox(height: 17,),
+                          ImageViewer(
+                            url: AppAssets.homeIcon,
+                            width: 18.w,
+                            height: 18.h,
+                            color: AppColors.blendModeColor,
+                          ),
+                          SizedBox(height: 7.h),
+                        ],
                       ),
-                      SizedBox(height: 7.h),
-                    ],
-                  ),
-                  activeIcon: Column(
-                    children: [
-                      SizedBox(height: 17,),
-                      ImageViewer(
-                        url: AppAssets.listIcon,
-                        width: 18.w,
-                        height: 18.h,
-                        color: AppColors.greenAccent,
+                      activeIcon: Column(
+                        children: [
+                          SizedBox(height: 17,),
+                          ImageViewer(
+                            url: AppAssets.homeIcon,
+                            width: 18.w,
+                            height: 18.h,
+                            color: AppColors.greenAccent,
+                          ),
+                          SizedBox(height: 7.h),
+                        ],
                       ),
-                      SizedBox(height: 7.h),
-                    ],
-                  ),
-                  label: AppStrings.list,
-                ),
-                BottomNavigationBarItem(
-                  icon: Column(
-                    children: [
-                      SizedBox(height: 17,),
-                      ImageViewer(
-                        url: AppAssets.cartIcon,
-                        width: 18.w,
-                        height: 18.h,
-                        color: AppColors.blendModeColor,
+                      label: AppStrings.home,
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Column(
+                        children: [
+                          SizedBox(height: 17,),
+                          ImageViewer(
+                            url: AppAssets.listIcon,
+                            width: 18.w,
+                            height: 18.h,
+                            color: AppColors.blendModeColor,
+                          ),
+                          SizedBox(height: 7.h),
+                        ],
                       ),
-                      SizedBox(height: 7.h),
-                    ],
-                  ),
-                  activeIcon: Column(
-                    children: [
-                      SizedBox(height: 17,),
-                      ImageViewer(
-                        url: AppAssets.cartIcon,
-                        width: 18.w,
-                        height: 18.h,
-                        color: AppColors.greenAccent,
+                      activeIcon: Column(
+                        children: [
+                          SizedBox(height: 17,),
+                          ImageViewer(
+                            url: AppAssets.listIcon,
+                            width: 18.w,
+                            height: 18.h,
+                            color: AppColors.greenAccent,
+                          ),
+                          SizedBox(height: 7.h),
+                        ],
                       ),
-                      SizedBox(height: 7.h),
-                    ],
-                  ),
-                  label: AppStrings.carts,
-                ),
-                BottomNavigationBarItem(
-                  icon: Column(
-                    children: [
-                      SizedBox(height: 17,),
-                      ImageViewer(
-                        url: AppAssets.profileIcon,
-                        width: 18.w,
-                        height: 18.h,
-                        color: AppColors.blendModeColor,
+                      label: AppStrings.list,
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Column(
+                        children: [
+                          SizedBox(height: 17,),
+                          ImageViewer(
+                            url: AppAssets.cartIcon,
+                            width: 18.w,
+                            height: 18.h,
+                            color: AppColors.blendModeColor,
+                          ),
+                          SizedBox(height: 7.h),
+                        ],
                       ),
-                      SizedBox(height: 7.h),
-                    ],
-                  ),
-                  activeIcon: Column(
-                    children: [
-                      SizedBox(height: 17,),
-                      ImageViewer(
-                        url: AppAssets.profileIcon,
-                        width: 18.w,
-                        height: 18.h,
-                        color: AppColors.greenAccent,
+                      activeIcon: Column(
+                        children: [
+                          SizedBox(height: 17,),
+                          ImageViewer(
+                            url: AppAssets.cartIcon,
+                            width: 18.w,
+                            height: 18.h,
+                            color: AppColors.greenAccent,
+                          ),
+                          SizedBox(height: 7.h),
+                        ],
                       ),
-                      SizedBox(height: 7.h),
-                    ],
-                  ),
-                  label: AppStrings.profile,
-                ),
+                      label: AppStrings.carts,
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Column(
+                        children: [
+                          SizedBox(height: 17,),
+                          ImageViewer(
+                            url: AppAssets.profileIcon,
+                            width: 18.w,
+                            height: 18.h,
+                            color: AppColors.blendModeColor,
+                          ),
+                          SizedBox(height: 7.h),
+                        ],
+                      ),
+                      activeIcon: Column(
+                        children: [
+                          SizedBox(height: 17,),
+                          ImageViewer(
+                            url: AppAssets.profileIcon,
+                            width: 18.w,
+                            height: 18.h,
+                            color: AppColors.greenAccent,
+                          ),
+                          SizedBox(height: 7.h),
+                        ],
+                      ),
+                      label: AppStrings.profile,
+                    ),
 
-              ],
+                  ],
+                ),
+              ),
             ),
-          ),
-        ),
-      )),
+            )),
+        Obx(() {
+          final isOffline = _connectivityController.status.value == ConnectivityStatus.Offline;
+          return Visibility(
+            visible: isOffline,
+            child: Opacity(
+              opacity: 0.7,
+              child: BaseScaffold(
+                statusBarColor: AppColors.error,
+                body: Container(
+                  color: AppColors.black.withOpacity(0.7),
+                  height: double.infinity,
+                  width: double.infinity,
+                ),
+                backgroundColor: Colors.transparent,
+                top: true,
+                bottom: true,
+              ),
+            ),
+          );
+        })
+      ],),
     );
   }
 }

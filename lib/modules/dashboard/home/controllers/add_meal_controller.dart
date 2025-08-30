@@ -13,7 +13,6 @@ import '../../../../core/widgets/custom_text_field.dart';
 
 class AddMealController extends GetxController {
   final ScrollController _scrollController = ScrollController();
-  RxInt items = 10.obs;
   void showEditDialog(BuildContext context, EditFieldType fieldType) {
     String title = '';
     List<Widget> inputFields = [];

@@ -40,6 +40,13 @@ class MyApp extends StatelessWidget {
           builder: DevicePreview.appBuilder,
           initialRoute: AppRoutes.DashBoard,
           getPages: AppPages.pages,
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+            brightness: Brightness.light,
+            colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.green)
+                .copyWith(secondary: Colors.red), // replaces accentColor
+          ),
+
         );
       },
     );

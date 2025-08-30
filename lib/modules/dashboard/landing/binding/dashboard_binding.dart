@@ -1,3 +1,5 @@
+import 'package:food/modules/connectivity/controllers/connectivity_controller.dart';
+import 'package:food/modules/connectivity/repository/connectivity_repository.dart';
 import 'package:get/get.dart';
 
 import '../../carts/controllers/carts_page_controller.dart';
@@ -15,5 +17,6 @@ class DashboardBinding extends Bindings {
     Get.lazyPut(() => ListPageController());
     Get.lazyPut(() => CartsPageController());
     Get.lazyPut(() => ProfilePageController());
+    Get.lazyPut(() => ConnectivityController(connectivityRepository: ConnectivityRepository()));
   }
 }
